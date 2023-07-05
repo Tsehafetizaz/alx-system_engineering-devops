@@ -1,0 +1,4 @@
+#!/bin/bash
+
+# Print the absolute path of the current working directory
+echo "The current working directory is: $(pwd)"

@@ -1,2 +1,2 @@
 #!/bin/bash
-head -n 26 {a..z} {z..a} \oo
+for i in {a..z}; do for j in {a..z}; do [[ "$i$j" != "oo" ]] && echo "$i$j"; done; done

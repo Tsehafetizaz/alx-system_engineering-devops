@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+# This script prints 'Best School' multiple times.
+
+for i in {1..9}
+do
+    echo "Best School"
+done

@@ -1,0 +1,1 @@
+This is read me for a loop is a control structure that executes a block of code multiple times. A loop is a block of code that repeats a list of commands as long as the loop control condition is true. 

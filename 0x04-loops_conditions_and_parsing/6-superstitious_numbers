@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# This script displays numbers from 1 to 20 and specific messages for 4, 9, and 17 as per superstitions from different countries.
+# This script displays numbers from 1 to 20 and specific messages for 4, 9, and 17 as per superstitions from different countries..
 
 count=1
 while [ $count -le 20 ]
@@ -12,3 +12,14 @@ do
         9)
             echo "9"
             echo "bad luck from Japan"
+            ;;
+        17)
+            echo "17"
+            echo "bad luck from Italy"
+            ;;
+        *)
+            echo "$count"
+            ;;
+    esac
+    ((count++))
+done

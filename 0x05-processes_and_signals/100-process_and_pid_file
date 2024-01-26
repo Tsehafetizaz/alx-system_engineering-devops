@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+# Handles PID file creation, SIGTERM, and SIGINT signals
+
+echo $$ > /var/run/myscript.pid
+
+trap 'rm -f /var/run/myscript.pid; echo "I hate the kill command"; exit' SIGTERM
+trap 'echo "Y U no love me?!"' SIGINT
+
+while true; do
+  echo "To infinity and beyond"
+  sleep 2
+done

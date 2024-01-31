@@ -1,0 +1,21 @@
+#!/bin/bash
+
+# Function to extract IPs using 'ip' command
+extract_with_ip() {
+  ip -4 addr show | grep -oP '(?<=inet\s)\d+(\.\d+){3}'
+}
+
+# Function to extract IPs using 'ifconfig' command
+extract_with_ifconfig() {
+  ifconfig | grep -oP '(?<=inet\s)\d+(\.\d+){3}'
+}
+
+# Check if 'ip' command is available, otherwise use 'ifconfig'
+if command -v ip > /dev/null; then
+  extract_with_ip
+else
+  extract_with_ifconfig
+fi
+
+# Always display localhost
+echo "127.0.0.1"

@@ -1,0 +1,4 @@
+#!/bin/bash
+
+# Listening on port 98 on localhost using 'nc'
+nc -lk 127.0.0.1 98

@@ -1,15 +1,17 @@
-#!/bin/bash
+#!/usr/bin/env bash
+# Configures an Ubuntu server as follows:
+#   - localhost resolves to 127.0.0.2
+#   - facebook.com resolves to 8.8.8.8
 
-# Check if the script is running in Docker
-if [ -f /.dockerenv ]; then
-    echo "Running in Docker, updating DNS settings"
-    
-    # Update /etc/hosts file to change the DNS resolutions
-    sed -i 's/127.0.0.1 localhost/127.0.0.2 localhost/' /etc/hosts
-    sed -i 's/157.240.11.35 facebook.com/8.8.8.8 facebook.com/' /etc/hosts
-    
-    echo "DNS settings updated successfully"
-else
-    echo "Not running in Docker, exiting"
-    exit 1
-fi
+cp /etc/hosts ~/hosts.new
+echo "127.0.0.2		localhost" > ~/hosts.new
+echo "8.8.8.8		facebook.com" >> ~/hosts.new
+cp -f ~/hosts.new /etc/hosts#!/usr/bin/env bash
+# Configures an Ubuntu server as follows:
+#   - localhost resolves to 127.0.0.2
+#   - facebook.com resolves to 8.8.8.8
+
+cp /etc/hosts ~/hosts.new
+echo "127.0.0.2		localhost" > ~/hosts.new
+echo "8.8.8.8		facebook.com" >> ~/hosts.new
+cp -f ~/hosts.new /etc/hosts

@@ -1,0 +1,19 @@
+# Debugging and Configuration for Apache in Docker Container
+
+## Accessing the Docker Container
+- Command: `docker exec -it [container_id] bash`
+
+## Checking Apache Status
+- Check Status: `service apache2 status`
+- Start Apache: `service apache2 start`
+
+## Configuring Apache
+- Navigate to Document Root: `cd /var/www/html`
+- Edit or Create index.html: `vi index.html`
+- Add the following content to index.html: `Hello Holberton`
+
+## Restarting Apache
+- Command: `service apache2 restart`
+
+## Exiting the Container
+- Command: `exit`

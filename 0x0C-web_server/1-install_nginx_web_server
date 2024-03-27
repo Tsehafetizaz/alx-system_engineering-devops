@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+# Installs Nginx and sets up a custom homepage
+
+# Update and install nginx
+sudo apt-get update
+sudo apt-get install -y nginx
+
+# Create a custom index.html
+echo "Hello World!" | sudo tee /var/www/html/index.html
+
+# Remove default nginx server block
+sudo rm /etc/nginx/sites-enabled/default
+
+# Create a new server block
+echo 'server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+
+    root /var/www/html;
+    index index.html;
+
+    server_name _;
+
+    location / {
+        try_files $uri $uri/ =404;
+    }
+}' | sudo tee /etc/nginx/sites-available/hello_world
+
+# Enable the new server block
+sudo ln -s /etc/nginx/sites-available/hello_world /etc/nginx/sites-enabled/
+
+# Reload Nginx to apply the changes
+sudo nginx -t && sudo service nginx reload

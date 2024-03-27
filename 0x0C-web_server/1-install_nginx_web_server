@@ -1,33 +1,29 @@
 #!/usr/bin/env bash
-# Installs Nginx and sets up a custom homepage
+# Setup script for a new Ubuntu machine to run Nginx
+# It listens on port 80 and serves a "Hello World" page
 
-# Update and install nginx
-sudo apt-get update
-sudo apt-get install -y nginx
+printf "Initiating Nginx installation and update process.\n"
+sudo apt-get update -y > /dev/null && sudo apt-get install -y nginx > /dev/null
 
-# Create a custom index.html
-echo "Hello World!" | sudo tee /var/www/html/index.html
+printf "\nApplying configurations and permissions.\n"
 
-# Remove default nginx server block
-sudo rm /etc/nginx/sites-enabled/default
+# Begin Nginx service
+sudo systemctl start nginx
 
-# Create a new server block
-echo 'server {
-    listen 80 default_server;
-    listen [::]:80 default_server;
+# Update firewall rules to allow Nginx traffic
+sudo ufw allow 'Nginx HTTP' > /dev/null
 
-    root /var/www/html;
-    index index.html;
+# Adjust ownership and permissions for web content directory
+sudo chown -R $USER:$USER /var/www/html
+sudo find /var/www -type d -exec chmod 755 {} \;
 
-    server_name _;
+# Safeguard original index file and create a new one
+sudo mv /var/www/html/index.nginx-debian.html{,.backup}
 
-    location / {
-        try_files $uri $uri/ =404;
-    }
-}' | sudo tee /etc/nginx/sites-available/hello_world
+# Inject "Hello World!" into the new index page
+echo "Hello World!" | sudo tee /var/www/html/index.nginx-debian.html > /dev/null
 
-# Enable the new server block
-sudo ln -s /etc/nginx/sites-available/hello_world /etc/nginx/sites-enabled/
+# Reload Nginx to apply new settings
+sudo systemctl reload nginx
 
-# Reload Nginx to apply the changes
-sudo nginx -t && sudo service nginx reload
+printf "\nSetup complete. ✔️\n"

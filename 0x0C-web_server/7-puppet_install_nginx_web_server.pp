@@ -1,65 +1,24 @@
-# install_nginx_web_server.pp
+# Setup New Ubuntu server with nginx
 
-class nginx_setup {
-  package { 'nginx':
-    ensure => installed,
-  }
-
-  service { 'nginx':
-    ensure    => running,
-    enable    => true,
-    require   => Package['nginx'],
-    subscribe => File['/etc/nginx/sites-available/default'],
-  }
-
-  file { '/etc/nginx/sites-available/default':
-    ensure  => file,
-    content => template('nginx/nginx.conf.erb'),
-    require => Package['nginx'],
-    notify  => Service['nginx'],
-  }
-
-  file { '/usr/share/nginx/html/index.html':
-    ensure  => file,
-    content => 'Hello World!',
-    require => Package['nginx'],
-    notify  => Service['nginx'],
-  }
-
-  file { '/usr/share/nginx/html/404.html':
-    ensure  => file,
-    content => 'Ceci n\'est pas une page',
-    require => Package['nginx'],
-    notify  => Service['nginx'],
-  }
+exec { 'update system':
+        command => '/usr/bin/apt-get update',
 }
 
-include nginx_setup
+package { 'nginx':
+	ensure => 'installed',
+	require => Exec['update system']
+}
 
-# Template content for nginx.conf.erb
-# Note: You need to create a nginx.conf.erb template file with the following content
-# and place it in your module's templates directory.
+file {'/var/www/html/index.html':
+	content => 'Hello World!'
+}
 
-# nginx.conf.erb
-server {
-    listen 80 default_server;
-    listen [::]:80 default_server;
+exec {'redirect_me':
+	command => 'sed -i "24i\	rewrite ^/redirect_me https://www.youtube.com/watch?v=QH2-TGUlwu4 permanent;" /etc/nginx/sites-available/default',
+	provider => 'shell'
+}
 
-    root /usr/share/nginx/html;
-    index index.html;
-
-    server_name _;
-
-    location / {
-        try_files $uri $uri/ =404;
-    }
-
-    location /redirect_me {
-        return 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;
-    }
-
-    error_page 404 /404.html;
-    location = /404.html {
-        internal;
-    }
+service {'nginx':
+	ensure => running,
+	require => Package['nginx']
 }

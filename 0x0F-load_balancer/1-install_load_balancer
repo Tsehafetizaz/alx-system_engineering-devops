@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+# Installs and configures HAproxy to distribute traffic between web-01 and web-02
+
+# Install HAproxy
+apt-get update
+apt-get install -y haproxy
+
+# Configure HAproxy
+echo "frontend http_front
+    bind *:80
+    stats uri /haproxy?stats
+    default_backend http_back
+
+
+backend http_back
+    balance roundrobin
+    server web-01 469061-web-01:80 check
+    server web-02 469061-web-02:80 check" > /etc/haproxy/haproxy.cfg
+
+
+# Restart HAproxy to apply the changes
+systemctl restart haproxy

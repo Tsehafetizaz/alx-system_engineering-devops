@@ -1,16 +1,24 @@
 #!/usr/bin/env bash
-# Configures Nginx to add a custom HTTP header named X-Served
+# Configures Nginx to with value of the server's hostname
 
 # Install Nginx if it's not already installed
 apt-get update
 apt-get install -y nginx
 
-# Configure Nginx to add the custom header
-echo "server {
+# Get the hostname of the server
+HOSTNAME=$(hostname)
+
+# Configure Nginx to add the custom header with the hostname
+cat > /etc/nginx/sites-available/default <<EOF
+server {
     listen 80 default_server;
     listen [::]:80 default_server;
     add_header X-Served-By $HOSTNAME;
-}" > /etc/nginx/sites-available/default
+    location / {
+        try_files \$uri \$uri/ =404;
+    }
+}
+EOF
 
 # Restart Nginx to apply the changes
 systemctl restart nginx

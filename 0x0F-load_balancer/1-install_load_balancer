@@ -1,22 +1,54 @@
 #!/usr/bin/env bash
-# Installs and configures HAproxy to distribute traffic between web-01 and web-02
+#
+# Install and configure HAProxy for load balancing
+# This script installs HAProxy on a new Ubuntu machine e
+# traffic to web-01 and web-02 servers using round-robin algorithm.
+#
+# Requirements:
+# - HAProxy should be installed and configured
+# - Traffic should be distributed using a round-robin algorithm
+#
+# Ignore SC2154 for shellcheck
 
-# Install HAproxy
+# Install HAProxy
+echo "Installing HAProxy..."
 apt-get update
 apt-get install -y haproxy
 
-# Configure HAproxy
-echo "frontend http_front
-    bind *:80
-    stats uri /haproxy?stats
-    default_backend http_back
+# Configure HAProxy
+echo "Configuring HAProxy..."
+cat <<EOF > /etc/haproxy/haproxy.cfg
+global
+    log /dev/log    local0
+    log /dev/log    local1 notice
+    chroot /var/lib/haproxy
+    stats socket /run/haproxy/admin.sock mode 660 level admin
+    stats timeout 30s
+    user haproxy
+    group haproxy
+    daemon
 
+defaults
+    log     global
+    mode    http
+    option  httplog
+    option  dontlognull
+    timeout connect 5000
+    timeout client  50000
+    timeout server  50000
+
+frontend http_front
+    bind *:80
+    default_backend http_back
 
 backend http_back
     balance roundrobin
-    server web-01 469061-web-01:80 check
-    server web-02 469061-web-02:80 check" > /etc/haproxy/haproxy.cfg
+    server web-01 [web-01-IP]:80 check
+    server web-02 [web-02-IP]:80 check
+EOF
 
+# Restart HAProxy
+echo "Restarting HAProxy..."
+service haproxy restart
 
-# Restart HAproxy to apply the changes
-systemctl restart haproxy
+echo "HAProxy installed and configured successfully."

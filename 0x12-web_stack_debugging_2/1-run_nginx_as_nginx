@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+# This script ensures nginx runs as the 'nginx' user and listens on port 8080
+sudo sed -i '/user www-data;/c\user nginx;' /etc/nginx/nginx.conf
+sudo sed -i '/listen 80 default_server;/c\    listen 8080 default_server;' /etc/nginx/sites-available/default
+sudo sed -i '/listen \[::\]:80 default_server;/c\    listen \[::\]:8080 default_server;' /etc/nginx/sites-available/default
+sudo systemctl restart nginx

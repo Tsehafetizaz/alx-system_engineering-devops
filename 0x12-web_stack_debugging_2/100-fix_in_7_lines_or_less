@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# Configures nginx to run as 'nginx' user and listen on port 8080 in less than 7 lines
+echo "user nginx;" > /etc/nginx/conf.d/override.conf
+echo "server { listen 8080 default_server; listen [::]:8080 default_server; }" >> /etc/nginx/conf.d/override.conf
+service nginx restart

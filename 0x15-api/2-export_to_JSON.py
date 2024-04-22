@@ -1,28 +1,33 @@
 #!/usr/bin/python3
-import requests
+"""Exports to-do list information for a given employee ID to JSON format."""
+
 import json
+import requests
 import sys
 
 
-def export_to_json(employee_id):
-    """Export the tasks of a given employee to a JSON file."""
-    user_base_url = "https://jsonplaceholder.typicode.com/users/"
-    todos_base_url = "https://jsonplaceholder.typicode.com/todos?userId="
+def export_to_json(user_id):
+    """Exports user's to-dos as JSON."""
+    base_url = "https://jsonplaceholder.typicode.com/"
+    user_response = requests.get(f"{base_url}users/{user_id}")
+    user = user_response.json()
+    username = user.get("username")
 
-    user = requests.get(f"{user_base_url}{employee_id}").json()
-    todos = requests.get(f"{todos_base_url}{employee_id}").json()
+    todos_response = requests.get(
+        f"{base_url}todos", params={"userId": user_id}
+    )
+    todos = todos_response.json()
 
     tasks = [{
-        "task": todo['title'],
-        "completed": todo['completed'],
-        "username": user['username']
+        "task": todo.get("title"),
+        "completed": todo.get("completed"),
+        "username": username
     } for todo in todos]
 
-    filename = f"{employee_id}.json"
-    with open(filename, mode='w') as file:
-        json.dump({str(employee_id): tasks}, file)
+    with open(f"{user_id}.json", "w") as jsonfile:
+        json.dump({user_id: tasks}, jsonfile)
 
 
 if __name__ == "__main__":
     if len(sys.argv) > 1:
-        export_to_json(int(sys.argv[1]))
+        export_to_json(sys.argv[1])

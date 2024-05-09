@@ -61,9 +61,9 @@ if __name__ == "__main__":
     if len(sys.argv) < 3:
         print("Usage: {} <subreddit> <list of keywords>".format(sys.argv[0]))
         # To ensure the example command is under 79 characters
-        example_cmd = "{} programming 'python java javascript'".format(sys.argv[0])
-        # Break down long print statements if necessary
-        print("Ex:", example_cmd[:39])
-        print("    ", example_cmd[39:])
+        example_cmd_part1 = "{} programming 'python".format(sys.argv[0])
+        example_cmd_part2 = "java javascript'"
+        print("Ex:", example_cmd_part1)
+        print("    ", example_cmd_part2)
     else:
         count_words(sys.argv[1], [x.lower() for x in sys.argv[2].split()])

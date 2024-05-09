@@ -1,67 +1,57 @@
 #!/usr/bin/python3
-"""
-Module to count keyword occurrences in the titles of hot posts from a given
-subreddit.
-"""
-
+"""Function to count words in all hot posts of a given Reddit subreddit."""
 import requests
-import re
-from collections import defaultdict
 
 
-def count_words(subreddit, word_list, after=None, count_dict=None):
+def count_words(subreddit, word_list, instances=None, after="", count=0):
+    """Prints counts of given words found in hot posts of a given subreddit.
+    Args:
+        subreddit (str): The subreddit to search.
+        word_list (list): The list of words to search for in post titles.
+        instances (dict): Key/value pairs of words/counts.
+        after (str): The parameter for the next page of the API results.
+        count (int): Total number of words counted so far.
     """
-    Recursively counts occurrences of each keyword in titles of hot posts
-    from a subreddit, handling pagination and case insensitivity.
-    """
-    if count_dict is None:
-        count_dict = defaultdict(int)
-
+    if instances is None:
+        instances = {}
+    url = f"https://www.reddit.com/r/{subreddit}/hot/.json"
     headers = {
-        'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:52.0) '
-                      'Gecko/20100101 Firefox/52.0'
+        "User-Agent": "linux:0x16.api.advanced:v1.0.0 (by /u/bdov_)"
     }
-    params = {'after': after}
-    url = f"https://www.reddit.com/r/{subreddit}/hot.json"
+    params = {"after": after, "limit": 100}
 
     try:
         response = requests.get(url, headers=headers, params=params,
                                 allow_redirects=False)
-        if response.status_code != 200:
-            if not after:  # If it's the first request and it fails
-                return
-        else:
-            data = response.json().get('data')
-            posts = data.get('children', [])
-            after = data.get('after')
+        response.raise_for_status()  # Raises HTTPError for bad requests
+        data = response.json().get("data")
+    except requests.RequestException as e:
+        print(f"Failed to retrieve data: {e}")
+        return
 
-            for post in posts:
-                title = post.get('data', {}).get('title', "")
-                for word in word_list:
-                    # Matches words respecting boundaries
-                    matches = re.findall(r'\b' + re.escape(word) + r'\b',
-                                         title, re.IGNORECASE)
-                    count_dict[word.lower()] += len(matches)
+    after = data.get("after")
+    for child in data.get("children", []):
+        title = child.get("data", {}).get("title", "").lower()
+        words = title.split()
+        for word in word_list:
+            normalized_word = word.lower()
+            instances[normalized_word] = instances.get(normalized_word, 0)
+            + words.count(normalized_word)
 
-            if after is not None:
-                return count_words(subreddit, word_list, after, count_dict)
-            else:
-                # Sorting and printing results
-                sorted_words = sorted(
-                    (word for word in count_dict if count_dict[word] != 0),
-                    key=lambda x: (-count_dict[x], x))
-                for word in sorted_words:
-                    print(f"{word}: {count_dict[word]}")
-    except requests.RequestException:
-        pass
+    if after is not None:
+        count_words(subreddit, word_list, instances, after, count)
+    else:
+        if instances:
+            sorted_instances = sorted(
+                instances.items(), key=lambda kv: (-kv[1], kv[0])
+            )
+            for key, value in sorted_instances:
+                print(f"{key}: {value}")
 
 
 if __name__ == "__main__":
     import sys
     if len(sys.argv) < 3:
         print("Usage: {} <subreddit> <list of keywords>".format(sys.argv[0]))
-        # Properly breaking long strings across multiple lines
-        example_cmd = "{} programming 'python java javascript'".format(sys.argv[0])
-        print("Ex:", example_cmd)
-    else:
-        count_words(sys.argv[1], [x.lower() for x in sys.argv[2].split()])
+        sys.exit(1)
+    count_words(sys.argv[1], sys.argv[2].split())

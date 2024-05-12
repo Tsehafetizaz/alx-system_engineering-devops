@@ -1,0 +1,38 @@
+Postmortem: API Service Outage – A Tale of Misconfiguration and Mischief
+Issue Summary
+On May 11, 2024, our API service experienced a partial outage from 17:00 to 19:30 EAT (East Africa Time), affecting approximately 45% of our users. This led to service speeds that were slower than a snail on a leisurely stroll, with some users facing outright timeouts. The root cause? A load balancer that decided to go rogue and play favorites with traffic distribution.
+
+Attractive Diagram
+Visualizing the Outage: Load Balancer Misadventures
+
+Before:
+ 
+
+After: 
+ 
+Timeline
+17:00 EAT - Our monitoring system sends up the flare; error rates climb faster than a squirrel on caffeine.
+17:05 EAT - Complaints start rolling in, signaling a user experience as frustrating as assembling flat-pack furniture without instructions.
+17:15 EAT - Infrastructure team assembles, armed with coffee, to hunt down the issue.
+17:30 EAT - It’s clear some servers are enjoying a break, while one is being bombarded.
+17:45 EAT - A recent tweak in configuration settings is eyed suspiciously, like a cat lurking around a goldfish bowl.
+18:20 EAT - Discovery of a misconfigured load balancer setting—evidently, it had decided to try out being a traffic tyrant.
+18:50 EAT - We corrected the load balancer's tyrannical settings, coaxing it back to democracy.
+19:00 EAT - Initiated a rolling restart; servers take a quick power nap.
+19:30 EAT - Monitoring confirms all is calm; service is as smooth as jazz.
+Root Cause and Resolution
+The drama unfolded due to a misconfigured setting in the load balancer, which had a brief episode of wanting to test its limits by overloading a single server. The fix involved a straightforward correction to the mischievous setting, ensuring traffic distribution was fair and balanced, restoring harmony across our servers.
+
+Corrective and Preventative Measures
+To ensure our load balancer doesn't relapse into its dictator-like tendencies, we've implemented a few strategic updates:
+
+Strengthen Configuration Management: A buddy system for configuration changes—because two heads are better than one, especially when one might be having an off day.
+Enhanced Monitoring Tools: We're upgrading our monitoring to detect when servers start sweating, ideally before they break into a full panic.
+Regular Load Balancing Drills: Monthly drills to ensure our infrastructure can handle surprises, sort of like unexpected guests at a party.
+Educational Refreshers: Keeping our team sharp with quarterly tech refreshers, because knowing is half the battle.
+Action Items:
+
+Automate Configuration Snapshots: Because hindsight is 20/20, and we like to keep a good rearview mirror.
+Sophisticated Anomaly Detection: To catch servers being naughty before they throw a full tantrum.
+Stress Test All Configurations: Stress tests will now be as routine as morning coffee.
+With these measures in place, we aim to prevent any future digital uprisings, ensuring our API service runs smoother than a buttered slip-and-slide.

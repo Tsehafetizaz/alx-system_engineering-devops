@@ -8,6 +8,6 @@ exec { 'fix-nginx-configuration':
 
 file { '/etc/nginx/nginx.conf':
   ensure  => file,
-  content => template('nginx/nginx.conf.erb'),
+  content => template('/alx-system_engineering-devops/0x1B-web_stack_debugging_4/templates/nginx/nginx.conf.erb'),
   notify  => Exec['fix-nginx-configuration'],
 }

@@ -1,13 +1,15 @@
-# This Puppet manifest optimizes the Nginx server configuration to handle more requests without failing.
+# This Puppet manifest increases the ULIMIT for Nginx and restarts the Nginx server.
 
-exec { 'fix-nginx-configuration':
-  command => '/usr/sbin/nginx -s reload',
-  path    => ['/bin', '/usr/bin', '/sbin', '/usr/sbin'],
-  onlyif  => 'grep "worker_processes 1;" /etc/nginx/nginx.conf',
+# Ensure the ULIMIT value is correctly set and uncommented in /etc/default/nginx
+exec { 'fix-ulimit-for-nginx':
+  command => 'sed -i "s/#ULIMIT=.*/ULIMIT=\\"-n 4096\\"/" /etc/default/nginx',
+  path    => ['/usr/local/bin', '/bin', '/usr/bin'],
+  unless  => 'grep -q "^ULIMIT=\\"-n 4096\\"" /etc/default/nginx',
 }
 
-file { '/etc/nginx/nginx.conf':
-  ensure  => file,
-  content => template('/alx-system_engineering-devops/0x1B-web_stack_debugging_4/templates/nginx/nginx.conf.erb'),
-  notify  => Exec['fix-nginx-configuration'],
+# Restart Nginx
+exec { 'nginx-restart':
+  command => 'service nginx restart',
+  path    => ['/usr/local/bin', '/bin', '/usr/sbin', '/etc/init.d'],
+  require => Exec['fix-ulimit-for-nginx'],
 }

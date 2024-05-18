@@ -1,6 +1,12 @@
-# Fixes an nginx site that can't handle multiple concurrent requests
-exec { 'fix--for-nginx':
-  command => "bash -c \"sed -iE 's/^ULIMIT=.*/ULIMIT=\\\"-n 8192\\\"/' \
-/etc/default/nginx; service nginx restart\"",
-  path    => '/usr/bin:/usr/sbin:/bin'
+# This Puppet manifest configures Nginx to handle higher load
+
+exec { 'increase-nginx-worker-connections':
+  command => '/usr/sbin/nginx -s reload',
+  path    => ['/usr/bin', '/usr/sbin', '/bin', '/sbin'],
+}
+
+file { '/etc/nginx/nginx.conf':
+  ensure  => file,
+  content => template('nginx/nginx.conf.erb'),
+  notify  => Exec['increase-nginx-worker-connections'],
 }

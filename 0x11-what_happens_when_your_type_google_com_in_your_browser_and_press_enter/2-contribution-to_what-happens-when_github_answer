@@ -1,0 +1,30 @@
+Demystifying the Web: My Contribution to Explaining What Really Happens When You Press Enter
+Unlocking the Hidden Journey of a URL Request
+
+In the vast expanse of the internet, a common action we all take for granted is the simple act of typing a URL into our web browsers and hitting Enter. Behind this seemingly instantaneous action is a complex dance of protocols, servers, and digital handshakes. The GitHub project, "What Happens When," has been a collective effort to elucidate this process. Today, I'm proud to share my contribution to this repository through a pull request that aims to enrich our shared understanding of the digital world.
+
+The Pull Request: A Dive into the Internet's Engine Room
+My pull request is not just a mere addition of content; it's an in-depth explanation enriched with a schema that visually represents the journey of an HTTPS request. This blog details the following steps, which are often invisible to the average user:
+
+DNS Resolution: The quest for the IP address begins.
+TCP/IP Handshake: Knocking on the internet's doors.
+SSL/TLS Encryption: Securing the secrets of the quest.
+Firewall Filtering: The guardian's scrutiny.
+Load Balancing: Distributing the digital workload.
+Web Server Interaction: Finding the right book in the vast library.
+Application Server Dynamics: The book comes to life, page by page.
+Database Queries: Diving into the archives for knowledge.
+Why Contribute?
+Contributing to open source is not just about writing code; it's about enhancing the collective knowledge and aiding in the education of others. With my pull request, I hope to provide a meaningful value to the project by transforming textual content into a visual journey. The schema included in my contribution simplifies the complex orchestration of processes that activate with a simple press of the Enter key.
+
+The Value of Visual Learning
+Visual aids can be powerful tools in education, especially when it comes to abstract concepts like networking protocols and internet infrastructure. By including a detailed, color-coded diagram in my pull request, I aimed to translate the textual description into a format that is easily digestible and accessible to visual learners. This can be particularly valuable for those new to networking concepts or for educators looking for resources to explain how the internet works.
+
+Collaboration and Continuous Learning
+What excites me the most about contributing to this project is the collaborative nature of open source. The project encourages continuous learning and sharing of knowledge, which are core values in the tech community. By sharing my insights and visual representation, I not only contribute to the project but also open myself to feedback and further learning through the collaborative review process inherent in pull requests.
+
+Join the Effort
+I encourage you to visit the project, see the existing content, and consider how you too can contribute. Whether it's through writing, reviewing, or providing visual aids, every bit of knowledge helps unravel the complexity of our digital interactions.
+
+Final Thoughts
+The pull request I've made is just a single step in the ongoing journey of discovery and education. I welcome you to view my contribution, share your thoughts, and perhaps, be inspired to make your own contributions to this project or others like it. Together, we can continue to build a web that's not only used but also understood.

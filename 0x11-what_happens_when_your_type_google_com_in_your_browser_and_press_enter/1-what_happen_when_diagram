@@ -1,0 +1,67 @@
+The Journey of Your HTTPS Request to Google
+Ever wondered what happens in the background when you type https://www.google.com into your web browser and press Enter? From the moment you initiate the request until you see the Google homepage, your request goes through a fascinating series of steps. Here, we'll demystify this process and provide a visual representation of the entire journey.
+
+1. DNS Resolution
+Your browser asks a DNS server for the IP address associated with www.google.com. This is like asking for directions to a destination.
+2. Establishing a Secure Connection
+The browser initiates a TCP/IP connection to the Google server's IP on port 443, the default port for HTTPS traffic.
+3. Encryption via HTTPS/SSL
+As part of establishing a secure connection, the SSL/TLS handshake occurs. This ensures that the data sent and received is encrypted.
+4. Passing Through Firewalls
+The request, now secure, passes through firewalls designed to protect against unauthorized access.
+5. Load Balancing
+Google's infrastructure uses load balancers to distribute network traffic across multiple servers, ensuring efficiency and reliability.
+6. Web Server Response
+The web server receives the request and serves the appropriate web page. It's like a librarian fetching a book for you.
+7. Application Server Processing
+The application server generates the requested web page, which may include executing backend code or retrieving user data.
+8. Database Interaction
+If necessary, the application server retrieves data from a database to dynamically generate the web page content.
+
+SCHEMA
+
++--------------------+         +-----------------+         +-----------------+         +----------+
+| User's Device      |         | Browser         |         | DNS Resolver     |         | Internet  |
++--------------------+         +-----------------+         +-----------------+         +----------+
+               |                 | DNS Request (.com)         |                 |
+               v                 v                             v                 v
+           +------------+         +------------+         +------------+         +------------+
+           |  Network   |         |  Recursor    |         |  Root Servers  |         |  TLD Servers|
+           |  Router    |         |             |         |                |         |            |
+           +------------+         +------------+         +------------+         +------------+
+               |                 | DNS Response (IP Address) |                 |
+               v                 v                             v                 v
+           +--------------------+         +-----------------+         +-----------------+
+           | User's Device      |         | Browser         |  (HTTPS Connection)  +------------+
+           +--------------------+         +-----------------+         |  Firewall     |         |
+                                             | Encrypted Traffic |         |             |
+                                             | (HTTPS)           |         |             |
+                                             v                 v         +------------+
+                                        +-------------------------+         |
+                                        | Load Balancer            |         |
+                                        +-------------------------+         |
+                                             |                 v         |
+                                        +-------------------------+         |
+                                        | Web Server 1 (Active)   |         |
+                                        +-------------------------+         |
+                                             |                 v         |
+                                        +-------------------------+         |
+                                        | Web Server 2 (Idle)    |         |
+                                        +-------------------------+         |
+                                             |                 v         |
+                                        +-------------------------+         |
+                                        | Application Server       | (Database Calls)
+                                        +-------------------------+         |
+                                             |                 v         |
+                                        +-------------------------+         |
+                                        | Database Server          |         |
+                                        +-------------------------+         |
+               +--------------------+         +-----------------+         +----------+
+               | User's Device      |         | Browser         |         | Internet  |
+               +--------------------+         +-----------------+         +----------+
+                                                | Receives Response |
+                                                | (Webpage)         |
+                                                v
+                                            +--------------------+
+                                            | User Sees Webpage  |
+                                            +--------------------+

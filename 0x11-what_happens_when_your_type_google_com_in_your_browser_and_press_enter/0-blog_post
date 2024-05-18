@@ -1,0 +1,72 @@
+Blog Post: What Happens When You Type https://www.google.com and Press Enter?
+When you enter a URL into your browser and hit Enter, a complex series of events unfolds to take you from URL to a fully rendered page. This journey involves multiple technologies, each crucial to the way the web works. Let’s explore these technologies step-by-step.
+
+1. DNS Request
+The Domain Name System (DNS) acts like the phonebook of the internet. When you type https://www.google.com, your browser needs to find the actual IP address to connect to. It sends a DNS query which goes through various DNS servers starting from your local cache, possibly your router, then the ISP, and up to the higher-level DNS servers until the correct IP address for www.google.com is found.
+
+2. TCP/IP
+TCP (Transmission Control Protocol) and IP (Internet Protocol) are foundational protocols for data exchange over the internet. TCP manages the sending and receiving of all your data packets, ensuring they are broken down into manageable sizes, transmitted, and then reassembled correctly at the destination. IP deals with the addressing and routing part, making sure that packets are sent to the right recipient.
+
+3. Firewall
+Before the data leaves your computer or once it arrives, a firewall checks it for security threats. Firewalls enforce a set of rules about what data packets are allowed in and out of a network to protect against unauthorized access and threats.
+
+4. HTTPS/SSL
+HTTPS (Hypertext Transfer Protocol Secure) involves an SSL (Secure Sockets Layer) or TLS (Transport Layer Security) protocol which encrypts the information sent and received. This encryption ensures that sensitive data like passwords and personal information is securely transmitted over the network.
+
+5. Load Balancer
+At the server side, if a website has high traffic, a load balancer distributes incoming network traffic across multiple servers. This prevents any single server from becoming a bottleneck, enhances the responsiveness, and maximizes uptime.
+
+6. Web Server
+The web server receives the HTTPS request and handles it by serving static content like HTML, CSS, and JavaScript files. Apache and Nginx are examples of popular web servers.
+
+7. Application Server
+For dynamic content, the request is passed on from the web server to an application server where business logic processes the request. This server might run scripts in languages such as PHP, Python, or Java to generate dynamic page content by pulling information from a database or another service.
+
+8. Database
+For many applications, especially dynamic ones, databases are crucial. They store and retrieve data that the application uses to dynamically generate web pages. When the application server needs data, it will make a request to the database which then sends the appropriate data back to the application server.
+
+Each of these components is critical in delivering the content that appears when you visit https://www.google.com. From securing the data, managing traffic, serving and generating content, to fetching data, they all work together to make the internet function smoothly.
+
+
+
++--------------------+         +-----------------+         +-----------------+         +----------+
+| User's Device      |         | Browser         |         | DNS Resolver     |         | Internet  |
++--------------------+         +-----------------+         +-----------------+         +----------+
+               |                 | DNS Request (.com)         |                 |
+               v                 v                             v                 v
+           +------------+         +------------+         +------------+         +------------+
+           |  Network   |         |  Recursor    |         |  Root Servers  |         |  TLD Servers|
+           |  Router    |         |             |         |                |         |            |
+           +------------+         +------------+         +------------+         +------------+
+               |                 | DNS Response (IP Address) |                 |
+               v                 v                             v                 v
+           +--------------------+         +-----------------+         +-----------------+
+           | User's Device      |         | Browser         |  (HTTPS Connection)  +------------+
+           +--------------------+         +-----------------+         |  Firewall     |         |
+                                             | Encrypted Traffic |         |             |
+                                             | (HTTPS)           |         |             |
+                                             v                 v         +------------+
+                                        +-------------------------+         |
+                                        | Load Balancer            |         |
+                                        +-------------------------+         |
+                                             |                 v         |
+                                        +-------------------------+         |
+                                        | Web Server 1 (Active)   | (Port 443)  |
+                                        +-------------------------+         |
+                                             |                 v         |
+                                        +-------------------------+         |
+                                        | Application Server       |         |
+                                        +-------------------------+         |
+                                             |                 v         |
+                                        +-------------------------+         |
+                                        | Database Server          |         |
+                                        +-------------------------+         |
+               +--------------------+         +-----------------+         +----------+
+               | User's Device      |         | Browser         |         | Internet  |
+               +--------------------+         +-----------------+         +----------+
+                                                | Receives Response |
+                                                | (Webpage)         |
+                                                v
+                                            +--------------------+
+                                            | User Sees Webpage  |
+                                            +--------------------+

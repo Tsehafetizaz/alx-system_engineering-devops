@@ -1,30 +1,31 @@
 #!/usr/bin/env bash
 # This script displays information about subdomains for a given domain
 
-function get_subdomain_info {
-    local domain=$1
-    local subdomain=$2
-    local result=$(dig +short ${subdomain}.${domain})
-    if [[ -n $result ]]; then
-        echo "The subdomain ${subdomain} is an A record and points to ${result}"
+# Function to fetch and display information about a subdomain
+domain_information () {
+    # Get the DNS record information using dig
+    line=$(dig "$2"."$1" +short)
+    
+    # Check if the subdomain has an A record
+    if [ -n "$line" ]; then
+        echo "The subdomain $2 is an A record and points to $line"
     else
-        echo "The subdomain ${subdomain} does not exist or has no A record"
+        echo "The subdomain $2 does not exist or has no A record"
     fi
 }
 
-domain=$1
-subdomain=$2
-
-if [[ -z $domain ]]; then
+# Check the number of arguments passed to the script
+if [ "$#" -eq 1 ]; then
+    # If only the domain is provided, check the default subdomains
+    domain_information "$1" "www"
+    domain_information "$1" "lb-01"
+    domain_information "$1" "web-01"
+    domain_information "$1" "web-02"
+elif [ "$#" -eq 2 ]; then
+    # If both domain and subdomain are provided, check the specified subdomain
+    domain_information "$1" "$2"
+else
+    # If incorrect number of arguments are provided, display usage information
     echo "Usage: $0 domain [subdomain]"
     exit 1
-fi
-
-if [[ -z $subdomain ]]; then
-    subdomains=("www" "lb-01" "web-01" "web-02")
-    for sub in "${subdomains[@]}"; do
-        get_subdomain_info $domain $sub
-    done
-else
-    get_subdomain_info $domain $subdomain
 fi
